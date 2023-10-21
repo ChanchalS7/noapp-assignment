@@ -27,7 +27,17 @@ app.use(bodyParser.json());
 
 //Define API routes
 app.use('/api/upload', uploadRoutes);
-const PORT = process.env.PORT || 8080
-app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`)
-})
+const PORT = process.env.PORT || 8002
+if (process.env.NODE_ENV === 'test') {
+	// Use a different port for testing
+	app.set('port', 8080);
+} else {
+	app.set('port', PORT);
+}
+
+// Start the server
+const server = app.listen(app.get('port'), () => {
+	console.log(`Server is running on port ${app.get('port')}`);
+});
+
+module.exports = server
